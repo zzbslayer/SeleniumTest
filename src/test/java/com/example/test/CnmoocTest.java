@@ -1,25 +1,23 @@
 package com.example.test;
 
-import java.util.regex.Pattern;
 import java.util.concurrent.TimeUnit;
 import org.junit.*;
 import static org.junit.Assert.*;
-import static org.hamcrest.CoreMatchers.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.Select;
 
 public class CnmoocTest {
   private WebDriver driver;
-  private String baseUrl;
   private boolean acceptNextAlert = true;
   private StringBuffer verificationErrors = new StringBuffer();
+
+  private final String account = "your_account";
+  private final String password = "your_password";
 
   @Before
   public void setUp() throws Exception {
     System.setProperty("webdriver.chrome.driver", "D:\\Tool\\Katalon_Studio_Windows_64-6.1.5\\configuration\\resources\\drivers\\chromedriver_win32\\chromedriver.exe");
     driver = new ChromeDriver();
-    baseUrl = "https://www.katalon.com/";
     driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
   }
 
@@ -28,18 +26,20 @@ public class CnmoocTest {
     // 登录
     driver.findElement(By.linkText("登录")).click();
     driver.findElement(By.id("loginName")).clear();
-    driver.findElement(By.id("loginName")).sendKeys("604239669@qq.com");
+    driver.findElement(By.id("loginName")).sendKeys(account);
     driver.findElement(By.id("password")).clear();
-    driver.findElement(By.id("password")).sendKeys("yourpassword");
+    driver.findElement(By.id("password")).sendKeys(password);
     driver.findElement(By.id("password")).sendKeys(Keys.ENTER);
     driver.findElement(By.id("userLogin")).click();
+    waitFor(1000);
+    // 模态
+    // 初始教程跳过
+    driver.findElement(By.xpath("/html/body/div[11]/div/div[5]/a[1]")).click();
     waitFor(1000);
   }
 
   public void collectionTest() throws InterruptedException{
-    // 模态
-    // 初始教程跳过
-    driver.findElement(By.xpath("/html/body/div[11]/div/div[5]/a[1]")).click();
+
     // 搜索课程
     driver.findElement(By.id("keyWord")).clear();
     driver.findElement(By.id("keyWord")).sendKeys("任锐");
@@ -107,12 +107,27 @@ public class CnmoocTest {
     assertEquals("本科", education);
   }
 
+  public void avatarTest() throws InterruptedException{
+    // 个人信息
+    driver.findElement(By.xpath("//*[@id=\"inner-header\"]/div[2]/div[1]/div/div/span")).click();
+    driver.findElement(By.xpath("//*[@id=\"inner-header\"]/div[2]/div[1]/div/ul/li[2]/a")).click();
+    waitFor(1000);
+    driver.findElement(By.xpath("//*[@id=\"headSet\"]")).click();
+    waitFor(1000);
+
+    String avatarPath = "C:\\Users\\shima\\Pictures\\qq.jpg";
+    driver.findElement(By.xpath("//*[@id=\"html5uploader-head_upload_2\"]/input")).sendKeys(avatarPath);
+    waitFor(2000);
+    driver.findElement(By.id("saveHead")).click();
+    waitFor(1000);
+  }
   @Test
   public void testUntitledTestCase() throws Exception {
     driver.get("https://www.cnmooc.org/home/index.mooc");
     loginTest();
     collectionTest();
     personalInfoTest();
+    avatarTest();
     driver.close();
   }
 
