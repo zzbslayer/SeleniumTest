@@ -5,14 +5,15 @@ import org.junit.*;
 import static org.junit.Assert.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.springframework.context.annotation.Bean;
 
 public class CnmoocTest {
   private WebDriver driver;
   private boolean acceptNextAlert = true;
   private StringBuffer verificationErrors = new StringBuffer();
 
-  private final String account = "your_account";
-  private final String password = "your_password";
+  private final String account = "account";
+  private final String password = "password";
 
   @Before
   public void setUp() throws Exception {
@@ -40,15 +41,6 @@ public class CnmoocTest {
 
   public void collectionTest() throws InterruptedException{
 
-    // 搜索课程
-    driver.findElement(By.id("keyWord")).clear();
-    driver.findElement(By.id("keyWord")).sendKeys("任锐");
-    driver.findElement(By.id("keyWord")).sendKeys(Keys.ENTER);
-    waitFor(1000);
-
-    driver.findElement(By.xpath("//*[@id=\"myCourse\"]/div/div/ul/li/div/div[2]/div[2]/div/a[1]")).click();
-
-    driver.findElement(By.xpath("/html/body/div[3]/div[1]/div/div[2]/div[2]/span/i")).click();
     driver.findElement(By.xpath("//*[@id=\"inner-header\"]/div[1]/a[2]")).click();
     waitFor(1000);
     // 多选
@@ -65,18 +57,9 @@ public class CnmoocTest {
     driver.findElement(By.xpath("/html/body/div[3]/div[1]/div[2]/div/div/ul/li[1]/ul/li[2]/a")).click();
     waitFor(1000);
 
-    String title = driver.findElement(By.xpath("/html/body/div[3]/div[2]/div[2]/ul/li[1]/div/div[2]/h3")).getText();
-    assertEquals("互联网应用开发技术", title);
-    title = driver.findElement(By.xpath("/html/body/div[3]/div[2]/div[2]/ul/li[2]/div/div[2]/h3")).getText();
+    String title = driver.findElement(By.xpath("/html/body/div[3]/div[2]/div[2]/ul/li/div/div[2]/h3")).getText();
     assertEquals("2018 ICBC-IBM金融科技创新大赛相关技术培训课程", title);
 
-    driver.findElement(By.xpath("/html/body/div[3]/div[1]/div[2]/div/div/ul/li[1]/ul/li[2]/a")).click();
-    waitFor(1000);
-    // 删除收藏
-    driver.findElement(By.xpath("/html/body/div[3]/div[2]/div[2]/ul/li[1]/div/i")).click();
-    waitFor(1000);
-    driver.findElement(By.xpath("/html/body/div[1]/div/table/tbody/tr[2]/td[2]/div/table/tbody/tr[3]/td/div/input[1]")).click();
-    waitFor(1000);
     // 删除收藏
     driver.findElement(By.xpath("/html/body/div[3]/div[2]/div[2]/ul/li/div/i")).click();
     waitFor(1000);
@@ -121,13 +104,47 @@ public class CnmoocTest {
     driver.findElement(By.id("saveHead")).click();
     waitFor(1000);
   }
+
+  public void lessonSelectTest() throws InterruptedException{
+    driver.findElement(By.xpath("//*[@id=\"inner-header\"]/div[1]/a[2]")).click();
+    waitFor(1000);
+    driver.findElement(By.xpath("/html/body/div[3]/div[2]/div[2]/ul/li[1]/div/div[2]/h3/a")).click();
+    driver.findElement(By.xpath("//*[@id=\"joinCourse\"]")).click();
+    waitFor(1000);
+    driver.findElement(By.xpath("//*[@id=\"userSelectStudy\"]/div[1]/div[2]/span[2]/a")).click();
+    driver.findElement(By.xpath("//*[@id=\"confirmInfo\"]")).click();
+    waitFor(1000);
+    driver.findElement(By.xpath("//*[@id=\"inner-header\"]/div[2]/div[1]/a")).click();
+    waitFor(1000);
+    driver.findElement(By.xpath("//*[@id=\"mycoursecenter\"]/a[3]")).click();
+    waitFor(1000);
+    driver.findElement(By.xpath("//*[@id=\"myCourse\"]/div/div/ul/li[4]/div/div[2]/div[2]/div[1]/a[4]")).click();
+    waitFor(1000);
+    driver.findElement(By.xpath("/html/body/div[1]/div/table/tbody/tr[2]/td[2]/div/table/tbody/tr[3]/td/div/input[1]")).click();
+    waitFor(1000);
+  }
+
+  public void kejianTest() throws InterruptedException{
+    driver.findElement(By.xpath("//*[@id=\"inner-header\"]/div[2]/div[1]/a")).click();
+    waitFor(1000);
+    driver.findElement(By.xpath("//*[@id=\"myCourse\"]/div/div/ul/li[1]/div/div[2]/div[2]/div/a[1]")).click();
+    driver.findElement(By.xpath("//*[@id=\"studyCourse\"]")).click();
+    driver.findElement(By.xpath("/html/body/div[3]/div[1]/div[2]/div/div/ul/li[2]/ul/li[1]/a")).click();
+    driver.findElement(By.xpath("//*[@id=\"unitNavigation\"]/div[4]/div[2]/div/div[1]/a[2]/i")).click();
+    waitFor(10000);
+    driver.findElement(By.xpath("/html/body/div[4]/div[2]/div[2]/div/div[2]/div/div/div[1]/div/ul/li[1]/a")).click();
+    waitFor(10000);
+  }
+
   @Test
   public void testUntitledTestCase() throws Exception {
     driver.get("https://www.cnmooc.org/home/index.mooc");
     loginTest();
-    collectionTest();
-    personalInfoTest();
-    avatarTest();
+    //collectionTest();
+    //personalInfoTest();
+    //avatarTest();
+    //lessonSelectTest();
+    kejianTest();
     driver.close();
   }
 
